@@ -1,0 +1,585 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Login Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+
+        .login-container {
+            background: linear-gradient(135deg, #1e1e2f 0%, #2a2a3e 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .container {
+            background-color: #1e1e2f;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(255, 107, 129, 0.1), 0 10px 20px rgba(255, 107, 129, 0.05);
+            position: relative;
+            overflow: hidden;
+            width: 900px;
+            max-width: 100%;
+            min-height: 600px;
+            animation: slideInUp 0.8s ease-out;
+            border: 1px solid #ff6b81;
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .sign-in-container {
+            left: 0;
+            width: 50%;
+            z-index: 2;
+        }
+
+        .container.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+        }
+
+        .sign-up-container {
+            left: 0;
+            width: 50%;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .container.right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: show 0.6s;
+        }
+
+        @keyframes show {
+            0%, 49.99% {
+                opacity: 0;
+                z-index: 1;
+            }
+            50%, 100% {
+                opacity: 1;
+                z-index: 5;
+            }
+        }
+
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+
+        .container.right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        .overlay {
+            background: linear-gradient(135deg, #ff6b81 0%, #ff8fa3 100%);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 0 0;
+            color: #ffffff;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .container.right-panel-active .overlay {
+            transform: translateX(50%);
+        }
+
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .overlay-left {
+            transform: translateX(-20%);
+        }
+
+        .container.right-panel-active .overlay-left {
+            transform: translateX(0);
+        }
+
+        .overlay-right {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        .container.right-panel-active .overlay-right {
+            transform: translateX(20%);
+        }
+
+        .social-container {
+            margin: 20px 0;
+        }
+
+        .social {
+            border: 1px solid #ff6b81;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            height: 40px;
+            width: 40px;
+            text-decoration: none;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            background: #2a2a3e;
+        }
+
+        .social:hover {
+            background: #ff6b81;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 129, 0.4);
+        }
+
+        .form-container .form {
+            background-color: #1e1e2f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            text-align: center;
+        }
+
+        .form-title {
+            font-weight: 700;
+            margin: 0 0 20px;
+            color: #ffffff;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-span {
+            font-size: 12px;
+            margin: 20px 0;
+            color: #cccccc;
+            font-weight: 400;
+        }
+
+        .input-group {
+            position: relative;
+            margin: 15px 0;
+            width: 100%;
+        }
+
+        .form-input {
+            background-color: #2a2a3e;
+            border: 1px solid #ff6b81;
+            border-radius: 25px;
+            padding: 15px 20px;
+            margin: 8px 0;
+            width: 100%;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
+            box-shadow: 0 2px 10px rgba(255, 107, 129, 0.1);
+            color: #ffffff;
+        }
+
+        .form-input:focus {
+            background-color: #3a3a4e;
+            box-shadow: 0 0 20px rgba(255, 107, 129, 0.3);
+            transform: translateY(-2px);
+            border-color: #ff8fa3;
+        }
+
+        .form-input::placeholder {
+            color: #999999;
+            font-weight: 300;
+        }
+
+        .forgot-password {
+            color: #ff6b81;
+            font-size: 14px;
+            text-decoration: none;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: #ff8fa3;
+            text-decoration: underline;
+        }
+
+        .form-button {
+            border-radius: 25px;
+            border: none;
+            background: linear-gradient(135deg, #ff6b81 0%, #ff8fa3 100%);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 15px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-top: 20px;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 5px 20px rgba(255, 107, 129, 0.3);
+        }
+
+        .form-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 129, 0.5);
+            background: linear-gradient(135deg, #ff8fa3 0%, #ffaab3 100%);
+        }
+
+        .form-button:active {
+            transform: translateY(-1px);
+        }
+
+        .ghost-button {
+            background-color: transparent;
+            border: 2px solid #ffffff;
+            border-radius: 25px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 12px 40px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .ghost-button:hover {
+            background-color: #ffffff;
+            color: #ff6b81;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .overlay-title {
+            font-weight: 700;
+            margin: 0 0 20px;
+            font-size: 2.2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+        }
+
+        .overlay-text {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+            margin: 20px 0 30px;
+            opacity: 0.9;
+            color: #ffffff;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 95%;
+                min-height: 500px;
+            }
+            
+            .form-container .form {
+                padding: 0 30px;
+            }
+            
+            .overlay-panel {
+                padding: 0 20px;
+            }
+            
+            .form-title {
+                font-size: 1.5rem;
+            }
+            
+            .overlay-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Additional animations for enhanced UX */
+        .form-input {
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-input:nth-child(1) { animation-delay: 0.1s; }
+        .form-input:nth-child(2) { animation-delay: 0.2s; }
+        .form-input:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .social {
+            animation: bounceIn 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .social:nth-child(1) { animation-delay: 0.1s; }
+        .social:nth-child(2) { animation-delay: 0.2s; }
+        .social:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes bounceIn {
+            from {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="container" id="container">
+            <!-- Sign Up Form -->
+            <div class="form-container sign-up-container">
+                <form class="form" id="signUpForm">
+                    <h1 class="form-title">Create Account</h1>
+                    <div class="social-container">
+                        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <span class="form-span">or use your email for registration</span>
+                    <div class="input-group">
+                        <input type="text" placeholder="Name" class="form-input" id="signUpName" required />
+                    </div>
+                    <div class="input-group">
+                        <input type="email" placeholder="Email" class="form-input" id="signUpEmail" required />
+                    </div>
+                    <div class="input-group">
+                        <input type="password" placeholder="Password" class="form-input" id="signUpPassword" required />
+                    </div>
+                    <button type="submit" class="form-button">Sign Up</button>
+                </form>
+            </div>
+
+            <!-- Sign In Form -->
+            <div class="form-container sign-in-container">
+                <form class="form" id="signInForm">
+                    <h1 class="form-title">Sign in</h1>
+                    <div class="social-container">
+                        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <span class="form-span">or use your account</span>
+                    <div class="input-group">
+                        <input type="email" placeholder="Email" class="form-input" id="signInEmail" required />
+                    </div>
+                    <div class="input-group">
+                        <input type="password" placeholder="Password" class="form-input" id="signInPassword" required />
+                    </div>
+                    <a href="#" class="forgot-password">Forgot your password?</a>
+                    <button type="submit" class="form-button">Sign In</button>
+                </form>
+            </div>
+
+            <!-- Overlay Container -->
+            <div class="overlay-container">
+                <div class="overlay">
+                    <div class="overlay-panel overlay-left">
+                        <h1 class="overlay-title">Welcome Back!</h1>
+                        <p class="overlay-text">To keep connected with us please login with your personal info</p>
+                        <button class="ghost-button" id="signInBtn">Sign In</button>
+                    </div>
+                    <div class="overlay-panel overlay-right">
+                        <h1 class="overlay-title">Hello, Friend!</h1>
+                        <p class="overlay-text">Enter your personal details and start your journey with us</p>
+                        <button class="ghost-button" id="signUpBtn">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const signUpButton = document.getElementById('signUpBtn');
+        const signInButton = document.getElementById('signInBtn');
+        const container = document.getElementById('container');
+        const signUpForm = document.getElementById('signUpForm');
+        const signInForm = document.getElementById('signInForm');
+
+        // Add event listeners for panel switching
+        signUpButton.addEventListener('click', () => {
+            container.classList.add("right-panel-active");
+        });
+
+        signInButton.addEventListener('click', () => {
+            container.classList.remove("right-panel-active");
+        });
+
+        // Handle form submissions
+        signUpForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('signUpName').value;
+            const email = document.getElementById('signUpEmail').value;
+            const password = document.getElementById('signUpPassword').value;
+            
+            if (name && email && password) {
+                alert(`Sign Up Successful!\nName: ${name}\nEmail: ${email}`);
+                signUpForm.reset();
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+
+        signInForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('signInEmail').value;
+            const password = document.getElementById('signInPassword').value;
+            
+            if (email && password) {
+                alert(`Sign In Successful!\nEmail: ${email}`);
+                signInForm.reset();
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+
+        // Add floating animation to social icons
+        document.querySelectorAll('.social').forEach((social, index) => {
+            social.addEventListener('mouseenter', () => {
+                social.style.transform = 'translateY(-5px) scale(1.1)';
+            });
+            
+            social.addEventListener('mouseleave', () => {
+                social.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add ripple effect to buttons
+        document.querySelectorAll('.form-button, .ghost-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                let ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                this.appendChild(ripple);
+                
+                let x = e.clientX - e.target.offsetLeft;
+                let y = e.clientY - e.target.offsetTop;
+                
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                // Enhanced tab navigation
+                const focusableElements = document.querySelectorAll('input, button, a');
+                focusableElements.forEach(element => {
+                    element.addEventListener('focus', () => {
+                        element.style.outline = '2px solid #ff6b81';
+                        element.style.outlineOffset = '2px';
+                    });
+                    element.addEventListener('blur', () => {
+                        element.style.outline = 'none';
+                    });
+                });
+            }
+        });
+
+        // Add smooth scroll for any internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Login page loaded successfully!');
+            
+            // Add initial focus to first input
+            setTimeout(() => {
+                document.getElementById('signInEmail').focus();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
